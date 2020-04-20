@@ -100,6 +100,17 @@ function(input, output, session) {
     return(map)
   })
   
+  # fitBound of phtos selected
+  observeEvent(c(input$year, input$album, input$subject), {
+    maxLong = max(selectedPhotos()$GPSLongitude)
+    maxLat = max(selectedPhotos()$GPSLatitude)
+    minLong = min(selectedPhotos()$GPSLongitude)
+    minLat = min(selectedPhotos()$GPSLatitude)
+    mapProxy <- leaflet::leafletProxy("map")
+    mapProxy %>%
+      leaflet::fitBounds(minLong, minLat, maxLong, maxLat)
+  })
+  
   # click on photo
   observeEvent(input$button_click_photo, {
     output$img <- renderImage({
