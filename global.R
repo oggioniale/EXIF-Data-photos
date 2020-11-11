@@ -65,6 +65,9 @@ listGPX <- list.files(
     "../../../../Documents/Alessandro/Tracks/2018",
     "../../../../Documents/Alessandro/Tracks/2017",
     "../../../../Documents/Alessandro/Tracks/2016",
+    # "../../../../Documents/Alessandro/Tracks/2015",
+    "../../../../Documents/Alessandro/Tracks/2014",
+    "../../../../Documents/Alessandro/Tracks/2013",
     "../../../../Documents/Alessandro/Tracks/2012",
     "../../../../Documents/Alessandro/Tracks/2011",
     "../../../../Documents/Alessandro/Tracks/2009"

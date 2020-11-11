@@ -111,6 +111,30 @@ function(input, output, session) {
     })
     
     # add tracks to the map
+    tracksIcon <- leaflet::awesomeIconList(
+      "Mountain biking" = leaflet::makeAwesomeIcon(
+        text = fa("biking"), markerColor = 'green', iconColor = 'white', library = "fa"
+      ),
+      Hiking = leaflet::makeAwesomeIcon(
+        text = fa("hiking"), markerColor = 'green', iconColor = 'white', library = "fa"
+      ),
+      Mountaineering = leaflet::makeAwesomeIcon(
+        text = fa("mountain"), markerColor = 'green', iconColor = 'white', library = "fa"
+      ),
+      Running = leaflet::makeAwesomeIcon(
+        text = fa("running"), markerColor = 'green', iconColor = 'white', library = "fa"
+      ),
+      Walking = leaflet::makeAwesomeIcon(
+        text = fa("shoe-prints"), markerColor = 'green', iconColor = 'white', library = "fa"
+      ),
+      Motorboat = leaflet::makeAwesomeIcon(
+        text = fa("ship"), markerColor = 'green', iconColor = 'white', library = "fa"
+      ),
+      Car = leaflet::makeAwesomeIcon(
+        text = fa("car"), markerColor = 'green', iconColor = 'white', library = "fa"
+      )
+    )
+    
     for (i in 1:length(listGPX)) {
       GPX_file <- listGPX[i]
       trackName <- sub('.*_', '', GPX_file)
@@ -135,7 +159,11 @@ function(input, output, session) {
               "Show plot",
               onclick = 'Shiny.onInputChange(\"button_click\",  Math.random())'
             )
-          )
+          ),
+          highlightOptions = leaflet::highlightOptions(color = "white",
+                                              weight = 2,
+                                              bringToFront = TRUE),
+          label = trackS[[trackName]]$type
         )
       } else if (is.na(wpS[[trackName]]$time[1])) {
         map <- map %>% leaflet::addPolylines(
@@ -157,7 +185,11 @@ function(input, output, session) {
               "Show plot",
               onclick = 'Shiny.onInputChange(\"button_click\",  Math.random())'
             )
-          )
+          ),
+          highlightOptions = leaflet::highlightOptions(color = "white",
+                                              weight = 2,
+                                              bringToFront = TRUE),
+          label = trackS[[trackName]]$type
         )
       } else if (trackS[[trackName]]$type == 'Motorboat') {
         map <- map %>% leaflet::addPolylines(
@@ -177,31 +209,34 @@ function(input, output, session) {
               "Show plot",
               onclick = 'Shiny.onInputChange(\"button_click\",  Math.random())'
             )
-          )
+          ),
+          highlightOptions = leaflet::highlightOptions(color = "white",
+                                              weight = 2,
+                                              bringToFront = TRUE),
+          label = trackS[[trackName]]$type
         )
       }
     }
     
     # add waypoints to the map
-    # waypointsIcon <- leaflet::makeAwesomeIcon(icon = 'flag', library = 'fa', markerColor = 'purple')
-    iconSet <- leaflet::awesomeIconList(
+    waypointsIcon <- leaflet::awesomeIconList(
       resturant = leaflet::makeAwesomeIcon(
         text = fa("utensils"), markerColor = 'green', iconColor = 'white', library = "fa"
         ),
       beach = leaflet::makeAwesomeIcon(
         text = fa("umbrella-beach"), markerColor = 'blue', iconColor = 'white', library = "fa"
-        )
-    )
-    iconSet <- leaflet::iconList(
-      resturant = leaflet::makeIcon("https://nominatim.openstreetmap.org/ui/mapicons/food_restaurant.p.20.png", iconWidth = 18, iconHeight = 18),
-      beach = leaflet::makeIcon("https://nominatim.openstreetmap.org/ui/mapicons/tourist_beach.p.20.png", iconWidth = 18, iconHeight = 18),
-      touristAttraction = leaflet::makeIcon("https://nominatim.openstreetmap.org/ui/mapicons/poi_point_of_interest.p.20.png", iconWidth = 18, iconHeight = 18),
-      village = leaflet::makeIcon("https://nominatim.openstreetmap.org/ui/mapicons/poi_boundary_administrative.p.20.png", iconWidth = 18, iconHeight = 18)
+        ),
+      touristAttraction = leaflet::makeAwesomeIcon(
+        text = fa("landmark"), markerColor = 'red', iconColor = 'white', library = "fa"
+      ),
+      village = leaflet::makeAwesomeIcon(
+        text = fa("home"), markerColor = 'orange', iconColor = 'white', library = "fa"
+      )
     )
     for (i in 1:length(waypointS)) {
       map <- map %>%
-        leaflet::addMarkers(
-        # leaflet::addAwesomeMarkers(
+        # leaflet::addMarkers(
+        leaflet::addAwesomeMarkers(
           data = waypointS[[i]],
           popup = paste0(
             "Name: <b>", waypointS[[i]]$name, "</b><br/>",
@@ -210,7 +245,7 @@ function(input, output, session) {
             "Link: <b><a target = 'blank' href = '", waypointS[[i]]$link1_href, "'>", waypointS[[i]]$link1_text, "</a></b><br/>",
             "Map: <b><a target = 'blank' href = '", waypointS[[i]]$link2_href, "'>", waypointS[[i]]$link2_text, "</a></b><br/>"
           ),
-          icon = ~iconSet[waypointS[[i]]$sym], # function providing custom marker-icons
+          icon = ~waypointsIcon[waypointS[[i]]$sym], # function providing custom marker-icons
           group = 'Waypoints',
           clusterOptions = leaflet::markerClusterOptions()
         )
