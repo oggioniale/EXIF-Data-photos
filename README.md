@@ -1,2 +1,2 @@
 # EXIF-Data-photos
-R solution for extract, read and write photos' exif data
+R solution for extract and read photos exif data
